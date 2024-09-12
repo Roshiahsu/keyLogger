@@ -1,13 +1,17 @@
 package org.example;
 
 
+import lombok.Data;
 import org.example.model.MissionDTO;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Data
 public class RobotAct {
 
     private static final RobotAct instance = new RobotAct();
@@ -16,15 +20,8 @@ public class RobotAct {
     }
     private Robot robot;
     private boolean isRunning;
-
-    /**
-     * tmp 用lombok後可以刪除
-     * @param running
-     */
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
-    private List<MissionDTO> missions = new ArrayList<>();
+    private List<MissionDTO> missions;
+    private Map<String, List<MissionDTO>> missionMap = new HashMap<>();
 
     /**
      * 建構子
@@ -37,11 +34,21 @@ public class RobotAct {
             e.printStackTrace();
             System.exit(1);
         }
-        tmpTestingSource();
+        regular();
     }
 
     public void start() {
-    for (MissionDTO mission : missions) {
+        missions = missionMap.get("regular");
+        do {
+            runMission();
+        } while (true);
+        //change missions
+        // runMission();
+
+    }
+
+    public void runMission() {
+        for (MissionDTO mission : missions) {
             if (!isRunning) {
                 break;
             }
@@ -61,21 +68,22 @@ public class RobotAct {
         }
         robot.keyRelease(key);
     }
-    public void addMission(MissionDTO mission) {
-        missions.add(mission);
+    private void regular() {
+        List<MissionDTO> list = new ArrayList<>();
+        list.add(new MissionDTO(KeyEvent.VK_A, 650));
+        list.add(new MissionDTO(KeyEvent.VK_W, 650));
+        list.add(new MissionDTO(KeyEvent.VK_D, 650));
+        list.add(new MissionDTO(KeyEvent.VK_S, 650));
+        list.add(new MissionDTO(KeyEvent.VK_A, 300));
+        list.add(new MissionDTO(KeyEvent.VK_W, 350));
+        list.add(new MissionDTO(KeyEvent.VK_A, 300));
+        list.add(new MissionDTO(KeyEvent.VK_W, 350));
+        list.add(new MissionDTO(KeyEvent.VK_D, 600));
+        list.add(new MissionDTO(KeyEvent.VK_S, 700));
+        createMissionMap("regular", list);
     }
 
-    private void tmpTestingSource() {
-        addMission(new MissionDTO(KeyEvent.VK_A, 650));
-        addMission(new MissionDTO(KeyEvent.VK_W, 650));
-        addMission(new MissionDTO(KeyEvent.VK_D, 650));
-        addMission(new MissionDTO(KeyEvent.VK_S, 650));
-        addMission(new MissionDTO(KeyEvent.VK_A, 300));
-        addMission(new MissionDTO(KeyEvent.VK_W, 350));
-        addMission(new MissionDTO(KeyEvent.VK_A, 300));
-        addMission(new MissionDTO(KeyEvent.VK_W, 350));
-        addMission(new MissionDTO(KeyEvent.VK_D, 600));
-        addMission(new MissionDTO(KeyEvent.VK_S, 700));
+    public void createMissionMap(String key, List<MissionDTO> missions) {
+        missionMap.put(key, missions);
     }
-
 }

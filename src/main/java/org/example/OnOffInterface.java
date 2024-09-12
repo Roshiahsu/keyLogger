@@ -13,9 +13,10 @@ public class OnOffInterface extends JFrame {
     private JButton offButton;
     private JLabel statusLabel;
     private boolean isRunning = false;
-    private RobotAct robotAct = new RobotAct();
+    private RobotAct robotAct;
 
     public OnOffInterface() {
+        robotAct = RobotAct.getInstance();
         setTitle("On and Off Interface");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
