@@ -1,15 +1,21 @@
 package org.example;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 錄製鍵盤活動
  */
-public class ActionRecode extends JFrame implements KeyListener {
+public class ActionRecode extends JFrame implements NativeKeyListener {
 
     private JTextArea textArea;
     private Map<Integer, Long> keyPressTimes;  // 存储每个按键按下的时间
@@ -28,9 +34,6 @@ public class ActionRecode extends JFrame implements KeyListener {
         textArea.setEditable(false);
         add(textArea);
 
-        // 添加键盘监听器
-        addKeyListener(this);
-        textArea.addKeyListener(this);
 
         setVisible(true);
         keyPressTimes = new HashMap<>();
@@ -38,12 +41,9 @@ public class ActionRecode extends JFrame implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
+    public void nativeKeyPressed(NativeKeyEvent  e) {
+        //NativeKeyEvent 的rawCode 對應 keyListener keyCode
+        int keyCode = e.getRawCode();
 
         // 如果按键还没有被记录，记录按下时间
         if (!keyAlreadyPressed.getOrDefault(keyCode, false)) {
@@ -55,8 +55,9 @@ public class ActionRecode extends JFrame implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
+    public void nativeKeyReleased(NativeKeyEvent e) {
+        //NativeKeyEvent 的rawCode 對應 keyListener keyCode
+        int keyCode = e.getRawCode();
         Long pressTime = keyPressTimes.get(keyCode);
 
         // 只有当按键被按下时，才能计算按住时间
@@ -72,7 +73,23 @@ public class ActionRecode extends JFrame implements KeyListener {
         }
     }
 
+    @Override
+    public void nativeKeyTyped(NativeKeyEvent e) {
+    }
+
     public static void main(String[] args) {
-        new ActionRecode();
+        // 添加键盘监听器
+        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        logger.setLevel(Level.OFF);
+
+        // 注册全局键盘监听器
+        try {
+            GlobalScreen.registerNativeHook();
+
+            // 添加键盘事件监听器
+            GlobalScreen.addNativeKeyListener(new ActionRecode());
+        } catch (NativeHookException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
