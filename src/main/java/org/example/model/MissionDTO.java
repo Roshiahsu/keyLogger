@@ -1,30 +1,22 @@
 package org.example.model;
 
+import lombok.Data;
+import org.example.KeyEventEnum;
+
 /**
  * 包裝動作
  */
+@Data
 public class MissionDTO {
-    private int keyEvent;
+    private KeyEventEnum keyEvent;
     private long ms;
 
-    public MissionDTO(int keyEvent, long ms) {
+    public MissionDTO(KeyEventEnum keyEvent, long ms) {
         this.keyEvent = keyEvent;
         this.ms = ms;
     }
 
-    public int getKeyEvent() {
-        return keyEvent;
-    }
-
-    public void setKeyEvent(int keyEvent) {
-        this.keyEvent = keyEvent;
-    }
-
-    public long getMs() {
-        return ms;
-    }
-
-    public void setMs(int ms) {
-        this.ms = ms;
+    public void press() {
+        this.keyEvent.press(ms);
     }
 }

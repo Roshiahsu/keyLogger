@@ -5,11 +5,12 @@ import lombok.Data;
 import org.example.model.MissionDTO;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.example.KeyEventEnum.*;
 
 @Data
 public class RobotAct {
@@ -39,20 +40,16 @@ public class RobotAct {
 
     public void start() {
         missions = missionMap.get("regular");
-        do {
-            runMission();
-        } while (true);
-        //change missions
-        // runMission();
-
+        runMission();
     }
+
 
     public void runMission() {
         for (MissionDTO mission : missions) {
             if (!isRunning) {
                 break;
             }
-            keyAct(mission.getKeyEvent(), mission.getMs());
+            mission.press();
         }
     }
 
@@ -70,16 +67,16 @@ public class RobotAct {
     }
     private void regular() {
         List<MissionDTO> list = new ArrayList<>();
-        list.add(new MissionDTO(KeyEvent.VK_A, 650));
-        list.add(new MissionDTO(KeyEvent.VK_W, 650));
-        list.add(new MissionDTO(KeyEvent.VK_D, 650));
-        list.add(new MissionDTO(KeyEvent.VK_S, 650));
-        list.add(new MissionDTO(KeyEvent.VK_A, 300));
-        list.add(new MissionDTO(KeyEvent.VK_W, 350));
-        list.add(new MissionDTO(KeyEvent.VK_A, 300));
-        list.add(new MissionDTO(KeyEvent.VK_W, 350));
-        list.add(new MissionDTO(KeyEvent.VK_D, 600));
-        list.add(new MissionDTO(KeyEvent.VK_S, 700));
+        list.add(new MissionDTO(KEY_A, 650));
+        list.add(new MissionDTO(KEY_W, 650));
+        list.add(new MissionDTO(KEY_D, 650));
+        list.add(new MissionDTO(KEY_S, 650));
+        list.add(new MissionDTO(KEY_A, 300));
+        list.add(new MissionDTO(KEY_W, 350));
+        list.add(new MissionDTO(KEY_A, 300));
+        list.add(new MissionDTO(KEY_W, 350));
+        list.add(new MissionDTO(KEY_D, 600));
+        list.add(new MissionDTO(KEY_S, 700));
         createMissionMap("regular", list);
     }
 

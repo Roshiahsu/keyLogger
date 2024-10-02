@@ -4,10 +4,13 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import org.example.model.MissionDTO;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +23,7 @@ public class ActionRecode extends JFrame implements NativeKeyListener {
     private JTextArea textArea;
     private Map<Integer, Long> keyPressTimes;  // 存储每个按键按下的时间
     private Map<Integer, Boolean> keyAlreadyPressed;  // 存储每个按键是否已被记录
+    private List<MissionDTO> keyRecode;  // 紀錄按鍵順序
 
    private final RobotAct robotAct = RobotAct.getInstance();
 
@@ -38,6 +42,7 @@ public class ActionRecode extends JFrame implements NativeKeyListener {
         setVisible(true);
         keyPressTimes = new HashMap<>();
         keyAlreadyPressed = new HashMap<>();
+        keyRecode = new ArrayList<>();
     }
 
     @Override

@@ -40,7 +40,7 @@ public enum KeyEventEnum {
         return null;
     }
 
-    public void press(int duration) {
+    public void press(long duration) {
         ScheduledFuture<?> future = keyTaskMap.remove(this);
         if (future != null && !future.isDone()) {
             future.cancel(false);
