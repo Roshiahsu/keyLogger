@@ -53,18 +53,6 @@ public class RobotAct {
         }
     }
 
-    private void keyAct(int key, long ms) {
-        // 模擬按下 "A" 鍵
-        robot.keyPress(key);
-
-        try {
-            // 每隔一秒按一次
-            Thread.sleep(ms);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        robot.keyRelease(key);
-    }
     private void regular() {
         List<MissionDTO> list = new ArrayList<>();
         list.add(new MissionDTO(KEY_A, 650));
