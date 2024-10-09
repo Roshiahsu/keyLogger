@@ -9,14 +9,28 @@ import org.example.KeyEventEnum;
 @Data
 public class MissionDTO {
     private KeyEventEnum keyEvent;
-    private long ms;
+    private long duration;
+    private int keyCode;
+    private boolean pressed;
 
-    public MissionDTO(KeyEventEnum keyEvent, long ms) {
+
+    public MissionDTO(KeyEventEnum keyEvent, long duration) {
         this.keyEvent = keyEvent;
-        this.ms = ms;
+        this.duration = duration;
+    }
+
+    public MissionDTO(int keyCode, long duration) {
+        this.keyCode = keyCode;
+        this.duration = duration;
+    }
+
+    public MissionDTO(int keyCode, boolean pressed, long duration) {
+        this.keyCode = keyCode;
+        this.pressed = pressed;
+        this.duration = duration;
     }
 
     public void press() {
-        this.keyEvent.press(ms);
+        this.keyEvent.press(duration);
     }
 }
